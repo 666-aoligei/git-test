@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        p {
+            height: 20px;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <label>
+        name： <input type="text" id="input1">
+
+    </label>
+    <p id="textName1"></p>
+
+    <label>
+        age <input type="text" id="input2">
+
+    </label>
+    <p id="textName2"></p>
+
+    <script>
+        /* 
+
+
+
+                ES6 原生提供 Proxy 构造函数，用来生成 Proxy 实例。
+
+                var proxy = new Proxy(target, handler);
+                target:目标对象  就是要被代理的对象
+                handler：{}  里面设置一些拦截行为
+
+        */
+
+        let inputAll = document.querySelectorAll('input');
+        let pAll = document.querySelectorAll('p')
+
+        let obj = {
+            name: 'SUN',
+            age: 77
+        }
+        //newObj就是obj对象的代理
+        let newObj = new Proxy(obj, {
+            //拦截获取行为  参数： 目标对象、属性名和 proxy 实例本身
+            get(target, propkey, pro) {
+                // console.log(target, propkey, pro);
+                return '999'
+            },
+            //拦截某个属性的赋值操作，可以接受四个参数，依次为目标对象、属性名、属性值和 Proxy 实例本身，其中最后一个参数可选
+            set(target, propkey, value, pro) {
+                // console.log('---set', target, propkey, value, pro);
+                if (propkey == 'age') {
+                    // if (value > 100) {
+                    //     throw new Error('不可能')
+                    // } else {
+                    //     console.log(22222);
+                    //     target[propkey] = value;
+                    // }
+                    pAll[1].innerText = value;
+
+
+                } else if (propkey == 'name') {
+                    //.....
+                    console.log('-----', );
+                    pAll[0].innerText = value;
+
+                }
+            },
+            //拦截 in运算符操作
+            has(target, propKey) {
+                // console.log('in----');
+                return true;
+            },
+            //拦截删除属性操作
+            deleteProperty(target, propKey) {
+                console.log('删除');
+            }
+
+        })
+        // //get
+        // // console.log(newObj.name);
+        // // console.log(newObj.age);
+        // //set
+        // newObj.name = '888'
+        // newObj.age = '23'
+        // //has   属性名  in  对象
+        // console.log(obj);
+
+        // console.log('age2222' in newObj);
+
+
+        // //deleteProperty 删除
+        // delete newObj.name;
+
+
+        // //-------
+
+
+
+
+        inputAll[0].addEventListener('input', function () {
+            newObj.name = this.value;
+
+        })
+
+        inputAll[1].addEventListener('input', function () {
+            newObj.age = this.value;
+
+        })
+    </script>
+</body>
+
+</html>
